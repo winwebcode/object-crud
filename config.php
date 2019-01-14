@@ -13,34 +13,30 @@ if ($connect_mysql_base->connect_error){
 	die($connect_mysql_base->connect_error);
 }
 
-//functions
+///////////////////////////////////functions
 
+//SQL query
 function queryMysql($query){
-global $connect_mysql_base;
-$result = $connect_mysql_base->query($query);
-	if ($result == FALSE){
-		die($connect_mysql_base->error);
-	}
+	global $connect_mysql_base;
+	$result = $connect_mysql_base->query($query);
+		if ($result == FALSE){
+			die($connect_mysql_base->error);
+		}
 
-	return $result;
-$result->close(); //освобождаем память
+return $result;
 }
 
-function createTable($name, $query)
-{
-queryMysql("CREATE TABLE IF NOT EXISTS $name($query)");
-echo "Таблица '$name' создана или уже существовала ранее<br>";
-}
+//Safe SQL, delete suspicious symbols in query
 
-function goexit(){
-	//session_start();
-	if (isset($_POST['logout'])) {
+function get_safe_post($var){
+	global $connect_mysql_base;
+	return $connect_mysql_base->real_escape_string($_POST[$var]);
 	
-	$sess_user_id = $_SESSION['user_id'];
-	unset ($_SESSION['user_id']);
-	session_destroy();
-	header('Location: index.php');
-	}
+}
+
+function createTable($name, $query){
+	queryMysql("CREATE TABLE IF NOT EXISTS $name($query)");
+	echo "Таблица '$name' создана или уже существовала ранее<br>";
 }
 
 //проверка авторизации
@@ -50,10 +46,10 @@ session_start();
 	echo "Авторизуйтесь чтобы видеть информацию<br>";
 
 	?>
-	<!-- форма авторизации-->
+	<!-- показываем форму авторизации если пользователь не авторизован-->
 <div class="blocker" align="center">  
   <br><br>
-    <form   action="testreg.php" method="post">  <!-- обработчик авторизации-->
+    <form  action="testreg.php" method="post">  <!-- обработчик авторизации-->
     <input class="auth" name="login" value="Логин" onfocus="value=''" type="text" size="20" maxlength="20"><br>
     <input class="auth" name="password" value="Пароль" onfocus="value=''" type="password" size="20" maxlength="20"><br>
     <input class="auth" type="submit" name="submit" value="Войти"><br>
@@ -63,7 +59,7 @@ session_start();
 	<?	
 	exit();
  }
- 
+	//если уже авторизован показываем ссылку на выход
  else{
  
  $random_otvet=rand(1,5);
@@ -89,8 +85,6 @@ session_start();
  
 	echo "Вы вошли как ".$_SESSION['login']." ";
 	?> <br><a name="logouts" href="out.php"><?php echo "$otvet";?></a><br><br> <?
-	
-	//добавить : если находишься на reg.php редиректить на главную
  }
 }
 ?>

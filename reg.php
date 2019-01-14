@@ -17,11 +17,8 @@
 
 
 <?
-//проверка авторизации
- include "config.php";
- //checkAuth();
- include "footer.php";
-
+require_once "config.php";
+require_once "footer.php";
  ?>
  
  </body>

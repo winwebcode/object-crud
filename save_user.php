@@ -5,6 +5,8 @@
 <body>
 <div align="center">
 <?php
+require_once "config.php";
+
 /*страница обработчик регистрации , post запросы с reg.php*/
 //проверки login / pass
      //заносим введенный пользователем логин в переменную $login, если он пустой, то уничтожаем переменную
@@ -30,7 +32,7 @@
 		exit ("Вы ввели не всю информацию, вернитесь назад и заполните все поля!");
     }
     
-	//если логин и пароль введены, то обрабатываем их, чтобы теги и скрипты не работали, мало ли что люди могут ввести
+	//если логин и пароль введены, то обрабатываем их
 	else {
 	    $login = stripslashes($login);
 		$login = htmlspecialchars($login);
@@ -39,8 +41,7 @@
 	//удаляем лишние пробелы
 		$login = trim($login);
 		$password = trim($password);
-	// подключаемся к базе
-		require_once ("config.php");
+	
 	// проверка на существование пользователя с таким же логином. Ищем user_id в таблице user, где login = переменной login
 		$result = queryMysql("SELECT user_id FROM user WHERE login='$login'");
 		$myrow = $result->fetch_array();

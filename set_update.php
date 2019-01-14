@@ -6,8 +6,8 @@
 </head>
 <body>
 <?
-include_once "config.php";
-
+require_once "config.php";
+checkAuth();
 // Обновление данных в БД klient
 	$family = $_POST['Family'];
 	$name = $_POST['name'];

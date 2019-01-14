@@ -1,17 +1,22 @@
 <?php
 require_once "config.php";
-checkAuth(); //проверка авторизации
+checkAuth();
 
-// Проверка поля Фамилия на пустоту , избавляет от отправки пустой формы
-if (!isset($_POST['Family'])){
-echo "Поля не заполнены";
-} 
+// Проверка поля Фамилия на пустоту , избавляет от отправки пустой формы.
+if (!isset($_POST['Family']) &&
+	!isset($_POST['Name']) &&
+	!isset($_POST['BirthDate']) &&
+	!isset($_POST['Telefon']) &&
+	!isset($_POST['ot4estvo'])
+	){
+		echo "Поля не заполнены";
+	} 
 else{
 	$zapr1 = $_POST['Family'];
 	$zapr2 = $_POST['Name'];
 	$zapr3 = $_POST['BirthDate'];
 	$zapr4 = $_POST['Telefon'];
-	$zapr8 = $_POST['ot4estvo'];
+	$zapr8 = $_POST['ot4estvo']; 
 	// ввод в таблицу клиент
 	$s = "INSERT INTO klient (family, name, birthdate, telefon, ot4estvo) VALUES ('$zapr1', '$zapr2', '$zapr3', '$zapr4','$zapr8')";
 	
@@ -22,8 +27,6 @@ else{
 	else{
 		header('Location: getklientlist.php');
 	}
-
-
 }
 ?>
 

@@ -4,6 +4,12 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 <body>
 
+<?php
+//ini_set('display_errors', 'Off');
+require_once "config.php";
+checkAuth(); //проверка авторизации
+?>
+
 <div align="center">
  <form>
 	<input class="button" type="text" value="Введите ID" name="nomerID" onfocus="value=''"> <br><br>
@@ -18,9 +24,6 @@
 
 
 <?php
-//ini_set('display_errors', 'Off');
-include_once "config.php";
-checkAuth(); //проверка авторизации
 
 echo "<div align='center'>";
 $s = queryMysql("SELECT * FROM klient") or die($connect_mysql_base->connect_error);

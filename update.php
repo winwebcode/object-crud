@@ -1,7 +1,7 @@
 <?
 /*update table*/
 
-include_once "config.php";
+require_once "config.php";
 
 // Обновление данных в БД klient
 $id=$_GET['ID_klient'];  // приходит из getklientlist.php

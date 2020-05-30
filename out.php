@@ -1,4 +1,4 @@
-<?
+<?php
 function goexit(){
 	session_start();
 	$sess_user_id = $_SESSION['user_id'];

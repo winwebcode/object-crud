@@ -1,4 +1,4 @@
-﻿<?
+﻿<?php
 require_once "config.php";
 checkAuth();
 // проверка на пустоту поля 'poisk'

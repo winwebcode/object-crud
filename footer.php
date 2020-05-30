@@ -1,2 +1,2 @@
 ﻿
-<div align="center"> <a href="/">ПолуCMS</a></div>
+<div align="center"> <a href="/">phpCRUD</a></div>

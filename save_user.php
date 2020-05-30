@@ -9,29 +9,19 @@ require_once "config.php";
 
 /*страница обработчик регистрации , post запросы с reg.php*/
 //проверки login / pass
-     //заносим введенный пользователем логин в переменную $login, если он пустой, то уничтожаем переменную
-	if (isset($_POST['login'])) {
+     
+	if (isset($_POST['login']) and isset($_POST['password'])) {
 		$login = $_POST['login'];
-	}
-	
-	if ($login == '') {
-		unset($login);
-	}
-	
-	//заносим введенный пользователем пароль в переменную $password, если он пустой, то уничтожаем переменную
-    if (isset($_POST['password'])) {
 		$password=$_POST['password'];
-	}
+	} else{exit;}
 	
-	if ($password =='') {
+	//заносим введенный пользователем логин пароль в переменную $password, если он пустой, то уничтожаем переменную
+	if ($login == '' or $password =='' or empty($login) or empty($password) or strlen($login)<4 or strlen($password)<6) {
+		unset($login);
 		unset($password);
+		exit ("Вы ввели не всю информацию или логин / пароль слишком короткие, вернитесь назад и заполните все поля!");
 	}
-    
-	//если пользователь не ввел логин или пароль, то выдаем ошибку и останавливаем скрипт
-	if (empty($login) or empty($password)) {
-		exit ("Вы ввели не всю информацию, вернитесь назад и заполните все поля!");
-    }
-    
+	    
 	//если логин и пароль введены, то обрабатываем их
 	else {
 	    $login = stripslashes($login);
@@ -41,13 +31,13 @@ require_once "config.php";
 	//удаляем лишние пробелы
 		$login = trim($login);
 		$password = trim($password);
-	
 	// проверка на существование пользователя с таким же логином. Ищем user_id в таблице user, где login = переменной login
 		$result = queryMysql("SELECT user_id FROM user WHERE login='$login'");
 		$myrow = $result->fetch_array();
 	}
 	
 	// если user уже есть, то обрываем регистрацию
+	//	if (!empty($myrow)){ // так тоже работает, как правильно?
 	if (!empty($myrow['user_id'])) {
 		exit ("Извините, введённый вами логин уже зарегистрирован.");
 	}
@@ -58,7 +48,7 @@ require_once "config.php";
 		
 	// Проверяем, есть ли ошибки
 	if ($result2=='TRUE') {
-		echo "Вы успешно зарегистрированы! Теперь вы можете зайти на сайт. <a href='index.php'>Главная страница</a>";
+		echo "Вы успешно зарегистрированы! Теперь вы можете авторизоваться. <a href='index.php'>Главная страница</a>";
 	}
 	else {
 		echo "Ошибка! Вы не зарегистрированы.";

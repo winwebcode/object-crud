@@ -1,4 +1,8 @@
-﻿<html>
+﻿<?php
+require_once "config.php";
+require_once "User.class.php";
+?>
+<html>
 <head>
 	<title>Регистрация</title>
 	
@@ -6,23 +10,15 @@
 </head>
 
 <div align="center">
-	<form  action="save_user.php" method="post">
-		<input class="button" type="text" value="Login" size="30" name="login" placeholder="Не менее 4 символов" onfocus="value=''" ><br><br>
-		<input class="button" type="text" value="Password" size="30" name="password" placeholder="Не менее 6 символов" onfocus="value=''" ><br><br>
-		<input class="button" type="submit"  value="Регистрация" > <br>
-		<input class="button" type="button" value="На главную" onclick= "document.location='index.php'"><br>
+	<form  action="reg.php"  method="POST">
+		<input class="button" type="text" value="Login" size="30" name="reg_login" placeholder="Не менее 4 символов" onfocus="value=''" ><br><br>
+		<input class="button" type="text" value="Password" size="30" name="reg_password" placeholder="Не менее 6 символов" onfocus="value=''" ><br><br>
+		<input class="button" type="submit" name="signup"  value="Регистрация"> <br>
+		<input class="button" type="button" value="На главную" onclick="document.location='index.php'"><br>
 	</form>
 </div>
 
 
-
 <?php
-require_once "config.php";
 require_once "footer.php";
-
-/**/
-
 ?>
- 
- </body>
-</html>

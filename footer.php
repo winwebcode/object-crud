@@ -1,2 +1,3 @@
-﻿
-<div align="center"> <a href="/">phpCRUD</a></div>
+<div align="center"> <a href="index.php">phpCRUD</a></div>
+</body>
+</html>

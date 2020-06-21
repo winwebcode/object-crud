@@ -9,9 +9,8 @@
 
 
 <?php
-
 require_once "config.php";
-//проверка авторизации
+require_once "User.class.php";
 checkAuth();
 
 ?>
@@ -28,29 +27,7 @@ checkAuth();
 <!--/Menu-->
 
 <?php
-echo "<div align='center'>";
-$s = queryMysql("SELECT * FROM user ORDER by user_id") or die($connect_mysql_base->connect_error); // запрос с сортировкой по user_id
+getMembersList();
 
-
-// Выводим заголовок таблицы:
-echo "<table border='1' width='40%' bgcolor='yellow'>";
-echo "<tr><td>Login</td><td>User ID</td>";
-
-echo "</tr>";
-
-// Выводим таблицу:  , получаем число рядов в выборке
-for ($c=0; $c<$s->num_rows; $c++){
-	echo "<tr>";
-	$f = $s->fetch_array(); 
-	echo "<td>$f[login]</td> <td>$f[user_id]</td>";
-	echo "</tr>";
-}
-echo "</table>";
-
+require_once "footer.php";
 ?>
-
-
-
-
-</body>
-</html>

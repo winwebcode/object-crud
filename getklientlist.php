@@ -1,4 +1,4 @@
-﻿<html>
+<html>
 <title>Управление списком клиентов</title>
 <meta charset="UTF-8" />
 <link rel="stylesheet" type="text/css" href="style.css">
@@ -8,7 +8,7 @@
 require_once "config.php";
 require_once "User.class.php";
 require_once "Client.class.php";
-checkAuth();
+shortUserInfo();
 ?>
 
 <div align="center">

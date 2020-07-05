@@ -1,12 +1,12 @@
-﻿<?php
+<?php
 
 require_once "config.php";
 require_once "User.class.php";
 require_once "Client.class.php";
-checkAuth();
+shortUserInfo();
 
 if ($_SESSION['role'] != "admin") {
-	echo "Not access";
+	echo "Forbidden";
 	//header('Location: index.php');
 }
 else {
@@ -20,8 +20,8 @@ else {
 
 <div align="center">
 	<form  action="add_admin.php"  method="POST">
-		<input class="button" type="text" value="Login" size="30" name="reg_login" placeholder="Логин не менее 4 символов"><br><br>
-		<input class="button" type="text" value="Password" size="30" name="reg_password" placeholder="Пароль не менее 6 символов"><br><br>
+		<input required class="button" type="text" value="Login" size="30" name="reg_login" placeholder="Логин не менее 4 символов"><br><br>
+		<input required class="button" type="text" value="Password" size="30" name="reg_password" placeholder="Пароль не менее 6 символов"><br><br>
 		<input class="button" type="submit" name="signup_admin"  value="Добавить Админа"> <br>
 		<input class="button" type="button" value="На главную" onclick="document.location='index.php'"><br>
 	</form>

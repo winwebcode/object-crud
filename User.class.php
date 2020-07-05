@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*Class User - Autharization, change password, check autharization,
  * ban and unban, list of members, save user,
  *  sign out, info about current user*/
@@ -30,35 +30,13 @@ function checkAuth() {
 	header('Location: auth.php');	
     }
     //если уже авторизован - показываем ссылку на выход / имя пользователя и прочее
-    else {
-	$random_otvet = rand(1,5);
-	switch ($random_otvet) {
-            case 1:
-                    $random_logout_text = "Выйти проветриться";
-                    break;
-            case 2:
-                    $random_logout_text = "Выйти из админки";
-                    break;
-            case 3:
-                    $random_logout_text = "Разлогиниться";
-                    break;
-            case 4:
-                    $random_logout_text = "Выход";
-                    break;
-            case 5:
-                    $random_logout_text = "Logout";
-                    break;
-            default:
-                    print "error";
-	}
-	$client_ip = $_SERVER['REMOTE_ADDR'];
+    else {	
+        $client_ip = $_SERVER['REMOTE_ADDR'];
 	$user_id = $_SESSION['user_id'];
 	$current_user = $_SESSION['login'];
 	$role = $_SESSION['role'];
-	echo "Вы вошли как <a href='user.php'>$current_user</a>, ваш IP <a target='blank' href='https://ip.osnova.news/?ip=$client_ip'>$client_ip</a>";
-	echo "<br><a href='?sign_out'>$random_logout_text</a><br><br>";
     }
-return $userdata = ['current_user'=>"$current_user", 'user_id'=>"$user_id", 'role'=>"$role"];
+return $userdata = ['current_user'=>"$current_user", 'user_id'=>"$user_id", 'role'=>"$role", 'client_ip'=>"$client_ip"];
 }
 
 
@@ -67,12 +45,12 @@ function safeCheckLogPass() {
 	// get data login / pass
 	if (isset($_POST['reg_login']) and isset($_POST['reg_password'])) {
 		$login = $_POST['reg_login'];
-		$password=$_POST['reg_password'];
+		$password = $_POST['reg_password'];
 	}
 	
 	if (isset($_POST['login']) and isset($_POST['password'])) {
 		$login = $_POST['login'];
-		$password=$_POST['password'];
+		$password = $_POST['password'];
 		// обработка логина пароля для безопасности
 		$login = stripslashes($login);
 		$login = htmlspecialchars($login);
@@ -163,7 +141,8 @@ function autharization() {
 }	
 
 
-/* Change user password request user.php -> update.php */
+/* Change user password request user.php -> upd_pass.php */
+
 if (isset($_POST['update_pass'])) {
     changePass();
 }
@@ -192,7 +171,7 @@ function changePass() {
 
             }
             else {
-                            echo "Ошибка вы ввели не верный действующий пароль";
+                echo "Ошибка вы ввели не верный действующий пароль";
             }
 	}
 }
@@ -227,7 +206,64 @@ function getMembersList() {
 }
 
 
-/*Info about current user */
+
+
+/* Upload userpic */
+if (isset($_POST['upload_userpic'])) {
+    uploadUserPic();
+}
+
+function uploadUserPic(){
+    $userdata = checkAuth();
+    $current_user = $userdata['current_user'];
+    if ($_FILES) {
+        $name = $_FILES['filename']['name'];
+        switch($_FILES['filename']['type']) {
+          case 'image/jpeg': $ext = 'jpg'; break;
+          case 'image/gif':  $ext = 'gif'; break;
+          case 'image/png':  $ext = 'png'; break;
+          case 'image/tiff': $ext = 'tif'; break;
+          default:           $ext = '';    break;
+        }
+        if ($ext) {
+          $userpic_full_path = "img/userpics/$current_user.$ext";
+          move_uploaded_file($_FILES['filename']['tmp_name'], $userpic_full_path);
+         // echo "Uploaded image '$name' as '$n':<br>";
+         queryMysql("UPDATE user SET userpic = '$userpic_full_path' WHERE login = '$current_user'");
+        }
+        else {
+            echo "$name is not an accepted image file";
+        }
+    }
+    else { 
+      echo "No image has been uploaded";
+    }
+}
+
+ if (isset($_POST['choise_userpic'])) {
+     choiseUserPic();
+ }
+
+function choiseUserPic(){
+    if (isset($_POST['my_userpic'])) {
+        $userdata = checkAuth();
+        $current_user = $userdata['current_user'];
+        $user_pic = $_POST['my_userpic'];
+
+        //$userpic_full_path = "img/userpics/$current_user.$ext";
+        queryMysql("UPDATE user SET userpic = 'img/userpics/$user_pic' WHERE login = '$current_user'");
+    }
+}
+
+function getUserPic(){
+   $s = queryMysql("SELECT userpic FROM user WHERE login = '$_SESSION[login]'");
+   $f = $s->fetch_array();
+   $path = "<a title='Смена аватара' href='upload_pic.php'><img class='avatar' width='150px' height='150px' src='$f[userpic]'></a>";
+   return $path;
+}
+
+
+/* Info about current user */
 function userInfo() {
     $userdata = checkAuth();
     $current_user = $userdata['current_user'];
@@ -235,18 +271,53 @@ function userInfo() {
     $s = queryMysql("SELECT * FROM user WHERE login='$current_user' ORDER BY user_id"); 
 
     // Выводим заголовок таблицы:
-    echo "<table border='1' width='40%' bgcolor='yellow'>";
-    echo "<tr><td>User ID</td><td>Login</td><td>Role</td><td>Last Login</td><td>Change pass</td>";
+    echo "<table class='table'>";
+    echo "<tr><td>Avatar</td><td>User ID</td><td>Login</td><td>Role</td><td>Last Login</td><td>Change pass</td>";
     echo "</tr>";
 	
-    // Выводим таблицу:  , получаем число рядов в выборке , $c меньше кол-ва рядов в выборке ($s->num_rows).
+    // Выводим таблицу:  получаем число рядов в выборке , $c меньше кол-ва рядов в выборке ($s->num_rows).
     for ($c=0; $c<$s->num_rows; $c++) {
             echo "<tr>";
             $f = $s->fetch_array(); 
-            echo "<td>$f[user_id]</td><td>$f[login]</td><td>$f[role]</td><td>$f[log]</td> <td> <form method='POST' action='update.php'><input type='submit' name='change_pass' value='Изменить пароль'></form></td>";
+            $userpic = $f['userpic'];
+            if ($userpic == ''){
+                $userpic = "<a href='upload_pic.php'>Upload avatar</a>";
+            } else {$userpic = getUserPic();}
+            echo "<td>$userpic</td><td>$f[user_id]</td><td>$f[login]</td><td>$f[role]</td><td>$f[log]</td> <td> <a href='upd_pass.php'><img title='Смена пароля' src='img/pass.png'></a></td>";
             echo "</tr>";
     }
     echo "</table>";
+}
+
+
+function shortUserInfo(){
+    $userdata = checkAuth();
+    $current_user = $userdata['current_user'];
+    $client_ip = $userdata['client_ip'];
+    // Sign out text
+    $random_otvet = rand(1,5);
+    switch ($random_otvet) {
+        case 1:
+                $random_logout_text = "Выйти проветриться";
+                break;
+        case 2:
+                $random_logout_text = "Выйти из админки";
+                break;
+        case 3:
+                $random_logout_text = "Разлогиниться";
+                break;
+        case 4:
+                $random_logout_text = "Выход";
+                break;
+        case 5:
+                $random_logout_text = "Logout";
+                break;
+        default:
+                print "error";
+    }
+    $userpic = getUserPic();
+    echo "$userpic<br><br> Вы вошли как <a title = 'Нажмите для подробной информации' href='user.php'>$current_user</a>, ваш IP <a target='blank' href='https://ip.osnova.news/?ip=$client_ip'>$client_ip</a>";
+    echo "<br><a href='?sign_out'>$random_logout_text</a><br><br>";
 }
 
 /* Ban and unban user */

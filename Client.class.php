@@ -35,13 +35,10 @@ if (isset($_POST['nomerID'])) {
 function deleteClient($drop_id) {
     // Удаление данных из БД klient
     $drop_id = $_POST['nomerID'];
-    if (queryMysql("delete from klient where (id_klient='$drop_id')") == True) {
+    if (queryMysql("delete from klient where (id_klient='$drop_id')") == true) {
         header('Location: getklientlist.php');
     } else {}
 }
-
-
-
 
 /* Mass delete */
 if (isset($_POST['clear_bd'])) {
@@ -50,7 +47,7 @@ if (isset($_POST['clear_bd'])) {
 
 function massDeleteClients() {
     // Удаление данных из БД klient
-    if (queryMysql("delete from klient where id_klient>='30')") == True) {
+    if (queryMysql("delete from klient where id_klient>='30')") == true) {
         echo "<br><strong>Клиенты с ID больше 30 удалены</strong>";
         //header('Location: getklientlist.php');
     } else {}
@@ -118,5 +115,37 @@ function searchByFamily(){
     else {
         echo "<div align='center'>Клиенты не найдены</div>";
     }
-}	
+}
+if (isset($_GET['change_data_client']))	{
+    changeDataClient();
+} 
+
+
+function changeDataClient(){
+    if (!isset($_GET['family']) ||
+    !isset($_GET['name']) ||
+    !isset($_GET['birth_date']) ||
+    !isset($_GET['phone']) ||
+    !isset($_GET['patronymic']) ||
+    !isset($_GET['id_klient'])) {
+        echo "Поля не заполнены";
+    } 
+    else {
+        $family = $_GET['family'];
+        $name = $_GET['name'];
+        $birth_date = $_GET['birth_date'];
+        $phone = $_GET['phone'];
+        $patronymic = $_GET['patronymic'];
+        $id = $_GET['id_klient'];
+
+        // update
+        if (queryMysql("UPDATE klient SET family = '$family' , name = '$name', patronymic='$patronymic', birth_date = '$birth_date', phone = '$phone' WHERE id_klient = '$id'") == true) {
+            //echo "<div align='center'>Успех</div><br>";
+            header('Location: getklientlist.php');
+        }
+        else {
+            echo "Ошибка";
+        }
+    }
+}
 

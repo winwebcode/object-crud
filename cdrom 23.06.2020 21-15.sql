@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 21, 2020 at 11:17 AM
+-- Generation Time: Jun 23, 2020 at 02:15 PM
 -- Server version: 5.7.22
--- PHP Version: 5.6.37
+-- PHP Version: 7.1.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -42,7 +42,7 @@ CREATE TABLE `klient` (
 --
 
 INSERT INTO `klient` (`family`, `name`, `patronymic`, `phone`, `birth_date`, `id_klient`) VALUES
-('Flashkin', 'Gleb', 'Aleksandrovith', '444003333', '10.10.2000', 1),
+('Flashkin', 'Gleb', 'Aleksandrovith', '4440111', '10.10.2000', 1),
 ('Borzova', 'Elena', 'Sergeevna', '10431777', '07.03.1900', 4),
 ('qwerty', 'qaz', 'wsx', '872384723847', '10.09.1809', 6),
 ('Бугундяев', 'Лашман', 'Ярбекович', '31293791222', '10101928', 9),
@@ -60,18 +60,19 @@ CREATE TABLE `user` (
   `user_id` int(11) NOT NULL,
   `log` varchar(255) DEFAULT NULL,
   `role` varchar(15) NOT NULL,
-  `ban` varchar(3) DEFAULT NULL
+  `ban` varchar(3) DEFAULT NULL,
+  `userpic` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`login`, `password`, `user_id`, `log`, `role`, `ban`) VALUES
-('administrator', '$2y$10$pB1QNtDdaigbDuaQfkQu4OZvcmsfvKKLtmYdJ1vwljLU18yi/ejve', 49, 'IP: 127.0.0.1, Дата: Fri Jun 19 11:43:35 UTC 2020', 'admin', ''),
-('newadmin', '$2y$10$BVKOyOYch2WeI3/c.t09hOyPeB/Dc4WFBnOsp1ZaUYvrteSYBIVOG', 51, 'IP: 127.0.0.1, Дата: Wed Jun 17 06:27:06 UTC 2020', 'user', NULL),
-('wewewe', '$2y$10$mTxg1hqFxyy7BbQyRF.LR.QPx21av1/4AwiW61X/RUdJGxLeOp5/m', 55, 'IP: 127.0.0.1, Дата: Thu Jun 18 10:49:59 UTC 2020', 'admin', ''),
-('user1', '$2y$10$EHDH7hY100XjdRPfgNCzpuOAeUy4glenimQ2Jz5xfQcuWv5MkQlQq', 56, 'IP: 127.0.0.1, Дата: Sat Jun 20 08:58:59 UTC 2020', 'user', '');
+INSERT INTO `user` (`login`, `password`, `user_id`, `log`, `role`, `ban`, `userpic`) VALUES
+('administrator', '$2y$10$nQFMZvr3jTSlPf6sR6dFHugW0eCGjkQ.YqIW6hPP4U.LwyLIyU8ea', 49, 'IP: 127.0.0.1, Дата: Tue Jun 23 09:31:35 UTC 2020', 'admin', '', 'img/userpics/administrator.jpg'),
+('newadmin', '$2y$10$BVKOyOYch2WeI3/c.t09hOyPeB/Dc4WFBnOsp1ZaUYvrteSYBIVOG', 51, 'IP: 127.0.0.1, Дата: Wed Jun 17 06:27:06 UTC 2020', 'user', '', NULL),
+('wewewe', '$2y$10$mTxg1hqFxyy7BbQyRF.LR.QPx21av1/4AwiW61X/RUdJGxLeOp5/m', 55, 'IP: 127.0.0.1, Дата: Thu Jun 18 10:49:59 UTC 2020', 'admin', '', NULL),
+('user1', '$2y$10$EHDH7hY100XjdRPfgNCzpuOAeUy4glenimQ2Jz5xfQcuWv5MkQlQq', 56, 'IP: 127.0.0.1, Дата: Sat Jun 20 08:58:59 UTC 2020', 'user', '', NULL);
 
 --
 -- Indexes for dumped tables

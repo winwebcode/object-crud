@@ -1,4 +1,7 @@
 Для работы необходимо импортировать .sql файл в базу данных MySQL.
+default
+login administrator
+password qwerty
 
 v.1
 Parser of currency with the Central Bank;
@@ -31,3 +34,11 @@ v 1.0.4
 Add User rights
 
 Add ban / unban users for Administrators
+
+v.1.0.5
+
+Add userpic upload
+
+v.1.0.6
+
+Add default userpics

@@ -1,80 +1,122 @@
 .blocker{
-border-radius: 28px 28px 28px 28px;
-background:#B30404;
-width:300px;
-height:250px;
-margin-left: auto;
-margin-right: auto;
-color:white;
+    border-radius: 28px 28px 28px 28px;
+    background:#B30404;
+    width:300px;
+    height:250px;
+    margin-left: auto;
+    margin-right: auto;
+    color:white;
 }
 
 .auth{
-margin-bottom:20px;
-border-radius: 8px 8px 8px 8px;
-color:black;
-width:200px;
-height: 30px;
-background:#F2CB08;
-font-family:'Times New Roman', Times, serif;
-font-weight:bold;
-color:#B30404;
-font-size:14px;
+    margin-bottom:20px;
+    border-radius: 8px 8px 8px 8px;
+    color:black;
+    width:200px;
+    height: 30px;
+    background:#F2CB08;
+    font-family:'Times New Roman', Times, serif;
+    font-weight:bold;
+    color:#B30404;
+    font-size:14px;
 }
 .button{
-color:black;
-width:200px;
-height: 30px;
-background-image: url('img/home2.jpg');
-font-family:'Times New Roman', Times, serif;
-font-weight:bold;
-font-size:18px;
-font-style:italic;
-text-align:center;
- border-radius: 8px 8px 8px 8px;
-
+    color:black;
+    width:200px;
+    height: 30px;
+    background-image: url('img/home2.jpg');
+    font-family:'Times New Roman', Times, serif;
+    font-weight:bold;
+    font-size:18px;
+    font-style:italic;
+    text-align:center;
+    border-radius: 8px 8px 8px 8px;
 }
 
 .button:hover{
-color:black;
-width:200px;
-height: 30px;
-background-image: url('img/home3.jpg');
-font-family:'Times New Roman', Times, serif;
-font-weight:bold;
-font-size:18px;
-font-style:italic;
-text-align:center;
+    color:black;
+    width:200px;
+    height: 30px;
+    background-image: url('img/home3.jpg');
+    font-family:'Times New Roman', Times, serif;
+    font-weight:bold;
+    font-size:18px;
+    font-style:italic;
+    text-align:center;
 }
 
 .menu{
-color:black;
-width:450px; 
-height: 40px;
-background-image: url('img/home2.jpg');
-font-family:'Times New Roman', Times, serif;
-font-weight:bold;
-font-size:18px;
-font-style:italic;
-text-align:center;
- border-radius: 8px 8px 8px 8px;
+    color:black;
+    width:450px; 
+    height: 40px;
+    background-image: url('img/home2.jpg');
+    font-family:'Times New Roman', Times, serif;
+    font-weight:bold;
+    font-size:18px;
+    font-style:italic;
+    text-align:center;
+    border-radius: 8px 8px 8px 8px;
 }
 
 .menu:hover{
-color:black;
-width:450px; 
-height: 40px;
-background-image: url('img/home3.jpg');
-font-family:'Times New Roman', Times, serif;
-font-weight:bold;
-font-size:18px;
-font-style:italic;
-text-align:center;
+    color:black;
+    width:450px; 
+    height: 40px;
+    background-image: url('img/home3.jpg');
+    font-family:'Times New Roman', Times, serif;
+    font-weight:bold;
+    font-size:18px;
+    font-style:italic;
+    text-align:center;
 }
 
 body {
-position:relative; top: 40px;
-background:#FFCF8C;
-color:#000000;
-text-align:center;
-#border-radius: 98px 98px 98px 98px;
+    position:relative; top: 40px;
+    background:#FFCF8C;
+    color:#000000;
+    text-align:center;
+}
+
+.avatar {
+   border-radius: 98px 98px 98px 98px;
+   opacity: 0.6;
+   background:red;
+}
+
+.table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 50%;
+    background-color: #f1e4b9b95f;
+}
+td {
+    border: 2px solid red;
+    padding: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #f8d43f8ffdb;
+    color: black;    
+}
+
+.table:hover {
+    background-color: #ccffff;
+}
+
+.password {
+    position: relative;
+}
+
+.password-control {
+    position: absolute;
+    top: 0px;
+    right: 6px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;
+}
+
+.password-control.view {
+	background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
 }

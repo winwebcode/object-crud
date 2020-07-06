@@ -250,8 +250,8 @@ function choiseUserPic(){
         $current_user = $userdata['current_user'];
         $user_pic = $_POST['my_userpic'];
 
-        //$userpic_full_path = "img/userpics/$current_user.$ext";
-        queryMysql("UPDATE user SET userpic = 'img/userpics/$user_pic' WHERE login = '$current_user'");
+        $userpic_full_path = "img/userpics/$user_pic";
+        queryMysql("UPDATE user SET userpic = '$userpic_full_path' WHERE login = '$current_user'");
     }
 }
 

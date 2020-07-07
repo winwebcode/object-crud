@@ -71,7 +71,8 @@
 }
 
 body {
-    position:relative; top: 40px;
+    position:relative;
+    top: 40px;
     background:#FFCF8C;
     color:#000000;
     text-align:center;
@@ -119,4 +120,11 @@ td {
 
 .password-control.view {
 	background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
+}
+
+.page404 {
+    position:relative;
+    top: 140px;
+    color:#000000;
+    text-align:center;
 }

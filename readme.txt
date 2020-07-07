@@ -1,5 +1,5 @@
 Для работы необходимо импортировать .sql файл в базу данных MySQL.
-default
+default log/pass
 login administrator
 password qwerty
 
@@ -31,14 +31,22 @@ Fix Search bug;
 
 v 1.0.4
 
-Add User rights
+Add User rights;
 
-Add ban / unban users for Administrators
+Add ban / unban users for Administrators;
 
 v.1.0.5
 
-Add userpic upload
+Add userpic upload;
 
 v.1.0.6
 
-Add default userpics
+Add default userpics;
+
+v 1.0.7
+
+Add favicon uploader;
+
+Settings page for administrators;
+
+Add 404 page;

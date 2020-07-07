@@ -39,7 +39,6 @@ function checkAuth() {
 return $userdata = ['current_user'=>"$current_user", 'user_id'=>"$user_id", 'role'=>"$role", 'client_ip'=>"$client_ip"];
 }
 
-
 /* Get login / pass and check it */
 function safeCheckLogPass() {
 	// get data login / pass
@@ -140,7 +139,6 @@ function autharization() {
     }
 }	
 
-
 /* Change user password request user.php -> upd_pass.php */
 
 if (isset($_POST['update_pass'])) {
@@ -178,7 +176,7 @@ function changePass() {
 
 /* Get list of users */
 function getMembersList() {
-    if ($_SESSION['role'] == "admin") {
+    if (checkAdmin()) {
         echo "<div align='center'>";
         $s = queryMysql("SELECT * FROM user ORDER by user_id"); // запрос с сортировкой по user_id
 
@@ -205,10 +203,7 @@ function getMembersList() {
     else {echo "Доступ запрещён";}
 }
 
-
-
-
-/* Upload userpic */
+/* Upload userpic*/
 if (isset($_POST['upload_userpic'])) {
     uploadUserPic();
 }
@@ -240,11 +235,11 @@ function uploadUserPic(){
     }
 }
 
- if (isset($_POST['choise_userpic'])) {
-     choiseUserPic();
- }
+if (isset($_POST['choise_userpic'])) {
+    choiseUserPic();
+}
 
-function choiseUserPic(){
+function choiseUserPic() {
     if (isset($_POST['my_userpic'])) {
         $userdata = checkAuth();
         $current_user = $userdata['current_user'];
@@ -255,24 +250,27 @@ function choiseUserPic(){
     }
 }
 
-function getUserPic(){
+function getUserPic() {
    $s = queryMysql("SELECT userpic FROM user WHERE login = '$_SESSION[login]'");
    $f = $s->fetch_array();
    $path = "<a title='Смена аватара' href='upload_pic.php'><img class='avatar' width='150px' height='150px' src='$f[userpic]'></a>";
    return $path;
 }
 
-
 /* Info about current user */
 function userInfo() {
     $userdata = checkAuth();
     $current_user = $userdata['current_user'];
+    if (checkAdmin()) {
+        $settings = "<td><a href='settings.php'>Settings</a></td>";
+    } else {}
+    
     echo "<div align='center'>";
     $s = queryMysql("SELECT * FROM user WHERE login='$current_user' ORDER BY user_id"); 
 
     // Выводим заголовок таблицы:
     echo "<table class='table'>";
-    echo "<tr><td>Avatar</td><td>User ID</td><td>Login</td><td>Role</td><td>Last Login</td><td>Change pass</td>";
+    echo "<tr><td>Avatar</td><td>User ID</td><td>Login</td><td>Role</td><td>Last Login</td><td>Change pass</td><td>Settings</td>";
     echo "</tr>";
 	
     // Выводим таблицу:  получаем число рядов в выборке , $c меньше кол-ва рядов в выборке ($s->num_rows).
@@ -283,14 +281,13 @@ function userInfo() {
             if ($userpic == ''){
                 $userpic = "<a href='upload_pic.php'>Upload avatar</a>";
             } else {$userpic = getUserPic();}
-            echo "<td>$userpic</td><td>$f[user_id]</td><td>$f[login]</td><td>$f[role]</td><td>$f[log]</td> <td> <a href='upd_pass.php'><img title='Смена пароля' src='img/pass.png'></a></td>";
+            echo "<td>$userpic</td><td>$f[user_id]</td><td>$f[login]</td><td>$f[role]</td><td>$f[log]</td><td><a href='upd_pass.php'><img title='Смена пароля' src='img/pass.png'></a></td>$settings";
             echo "</tr>";
     }
     echo "</table>";
 }
 
-
-function shortUserInfo(){
+function shortUserInfo() {
     $userdata = checkAuth();
     $current_user = $userdata['current_user'];
     $client_ip = $userdata['client_ip'];
@@ -320,12 +317,21 @@ function shortUserInfo(){
     echo "<br><a href='?sign_out'>$random_logout_text</a><br><br>";
 }
 
+function checkAdmin() {
+    $userdata = checkAuth();
+    $role = $userdata['role'];
+    if ($role == "admin") {
+        return true;
+    } else {return false;}
+}
+
 /* Ban and unban user */
 if (isset($_GET['ban']) or isset($_GET['unban'])) {
-    if ($_SESSION['role'] == "admin") {
-            getBan();
-    } else {}
+    if (checkAdmin()) {
+       getBan();
+    } else { header('Location: 404.php');}
 }
+
 function getBan() {
     if (isset($_GET['ban'])) {
         $user_id = $_GET['ban'];
@@ -341,4 +347,34 @@ function getBan() {
             header('Location: members.php');
         }
     } else {}
+}
+
+/* Site settings */
+
+if (isset($_POST['upload_favicon'])) {
+    uploadFavicon();
+}
+
+function uploadFavicon() {
+    $userdata = checkAuth();
+    $current_user = $userdata['current_user'];
+    if ($_FILES) {
+        $name = $_FILES['filename']['name'];
+        switch($_FILES['filename']['type']) {
+          case 'image/x-icon': $ext = 'ico'; break;
+          case 'image/png': $ext = 'png'; break;
+          default:           $ext = '';    break;
+        }
+        if ($ext) {
+            $favicon_path = "img/favicon/favicon.$ext";
+            move_uploaded_file($_FILES['filename']['tmp_name'], $favicon_path);
+            queryMysql("UPDATE settings SET favicon = '$favicon_path'");
+        }
+        else {
+            echo "$name is not an accepted image file";
+        }
+    }
+    else { 
+      echo "No image has been uploaded";
+    }
 }

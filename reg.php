@@ -6,6 +6,7 @@ require_once "User.class.php";
 <head>
 	<title>Регистрация</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="shortcut icon" href="img/favicon/favicon.png" type="image/x-icon">
 </head>
  <script src="js/script.js" type="text/javascript"></script>
 <div align="center">

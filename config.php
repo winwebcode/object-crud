@@ -37,3 +37,27 @@ function createTable($name, $query) {
 	queryMysql("CREATE TABLE IF NOT EXISTS $name($query)");
 	echo "Таблица '$name' создана или уже существовала ранее<br>";
 }
+
+function uploadFavicon() {
+    $userdata = checkAuth();
+    $current_user = $userdata['current_user'];
+    if ($_FILES) {
+        $name = $_FILES['filename']['name'];
+        switch($_FILES['filename']['type']) {
+          case 'image/x-icon': $ext = 'ico'; break;
+          case 'image/png': $ext = 'png'; break;
+          default:           $ext = '';    break;
+        }
+        if ($ext) {
+            $favicon_path = "img/favicon/favicon.$ext";
+            move_uploaded_file($_FILES['filename']['tmp_name'], $favicon_path);
+            queryMysql("UPDATE settings SET favicon = '$favicon_path'");
+        }
+        else {
+            echo "$name is not an accepted image file";
+        }
+    }
+    else { 
+      echo "No image has been uploaded";
+    }
+}

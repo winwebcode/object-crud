@@ -22,7 +22,7 @@ shortUserInfo();
 
     <?php  if ($_SESSION['role'] == "admin") {
         ?>
-        <input class="menu" type="button" onclick="document.location='add_admin.php'" value="Добавить администратора"><br>
+        <input class="menu" type="button" onclick="document.location='settings.php'" value="Настройки сайта"><br>
         <input class="menu" type="button" onclick="document.location='members.php'" value="Список пользователей"><br>
         <?php
     }
@@ -34,6 +34,5 @@ shortUserInfo();
 
 
 <?php
-
 require_once "footer.php";
-?>
+

@@ -10,6 +10,7 @@
 <?php
 require_once "config.php";
 require_once "User.class.php";
+shortUserInfo();
 ?>
 
 
@@ -18,9 +19,10 @@ require_once "User.class.php";
 <h3>Меню </h3>
 <form class="menu">
     <input class="menu" type="button" value="Обновить favicon" onclick="document.location='favicon.php'"><br>
+    <input class="menu" type="button" onclick="document.location='add_admin.php'" value="Добавить администратора"><br>
 
 </form> 
-</div>
+</div><br><br>
 <!--/Menu-->
 
 <?php

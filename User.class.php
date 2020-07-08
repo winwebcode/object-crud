@@ -117,7 +117,7 @@ function autharization() {
 	$password = $userdata['password'];
 	//извлекаем из базы все данные о пользователе
 	$resultat = queryMysql("SELECT * FROM user WHERE login='$login'"); 
-	$myrow = $resultat->fetch_array(); 
+	$myrow = $resultat->fetch_array();
 
 	//если пользователя с введенным логином не существует
     if (empty($myrow['login'])) {
@@ -214,11 +214,21 @@ function uploadUserPic(){
     if ($_FILES) {
         $name = $_FILES['filename']['name'];
         switch($_FILES['filename']['type']) {
-          case 'image/jpeg': $ext = 'jpg'; break;
-          case 'image/gif':  $ext = 'gif'; break;
-          case 'image/png':  $ext = 'png'; break;
-          case 'image/tiff': $ext = 'tif'; break;
-          default:           $ext = '';    break;
+            case 'image/jpeg':
+                $ext = 'jpg';
+                break;
+            case 'image/gif':
+                $ext = 'gif';
+                break;
+            case 'image/png':
+                $ext = 'png';
+                break;
+            case 'image/tiff':
+                $ext = 'tif';
+                break;
+            default:
+                $ext = '';
+                break;
         }
         if ($ext) {
           $userpic_full_path = "img/userpics/$current_user.$ext";
@@ -337,7 +347,7 @@ function getBan() {
         $user_id = $_GET['ban'];
         echo "$user_id<br>";
         if (queryMysql("UPDATE user SET ban = 'yes' WHERE user_id = '$user_id'")) {
-                header('Location: members.php');
+            header('Location: members.php');
         }
     } else {}
 
@@ -361,9 +371,15 @@ function uploadFavicon() {
     if ($_FILES) {
         $name = $_FILES['filename']['name'];
         switch($_FILES['filename']['type']) {
-          case 'image/x-icon': $ext = 'ico'; break;
-          case 'image/png': $ext = 'png'; break;
-          default:           $ext = '';    break;
+            case 'image/x-icon':
+                $ext = 'ico';
+                break;
+            case 'image/png':
+                $ext = 'png';
+                break;
+            default:           
+                $ext = '';
+                break;
         }
         if ($ext) {
             $favicon_path = "img/favicon/favicon.$ext";

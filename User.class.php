@@ -303,7 +303,7 @@ function userInfo() {
 
     // Выводим заголовок таблицы:
     echo "<table class='table'>";
-    echo "<tr><td>Avatar</td><td>User ID</td><td>Login</td><td>Role</td><td>Last Login</td><td>Change pass</td><td>Days on site</td><td>Settings</td>";
+    echo "<tr><td>Avatar</td><td>User ID</td><td>Login</td><td>Role</td><td>Last Login</td><td>Change pass</td><td>Days on site</td><td>Registered</td><td>Settings</td>";
     echo "</tr>";
 	
     // Выводим таблицу:  получаем число рядов в выборке , $c меньше кол-ва рядов в выборке ($s->num_rows).
@@ -315,7 +315,7 @@ function userInfo() {
             if ($userpic == ''){
                 $userpic = "<a href='upload_pic.php'>Upload avatar</a>";
             } else {$userpic = getUserPic();}
-            echo "<td>$userpic</td><td>$f[user_id]</td><td>$f[login]</td><td>$f[role]</td><td>$f[log]</td><td><a href='upd_pass.php'><img title='Смена пароля' src='img/pass.png'></a></td><td>$count_days</td>$settings";
+            echo "<td>$userpic</td><td>$f[user_id]</td><td>$f[login]</td><td>$f[role]</td><td>$f[log]</td><td><a href='upd_pass.php'><img title='Смена пароля' src='img/pass.png'></a></td><td>$count_days</td><td>$f[reg_date]</td>$settings";
             echo "</tr>";
     }
     echo "</table>";

@@ -45,6 +45,13 @@ function safeCheckLogPass() {
 	if (isset($_POST['reg_login']) and isset($_POST['reg_password'])) {
 		$login = $_POST['reg_login'];
 		$password = $_POST['reg_password'];
+                // обработка логина пароля для безопасности
+                $login = stripslashes($login);
+		$login = htmlspecialchars($login);
+		$login = trim($login);
+		$password = stripslashes($password);
+		$password = htmlspecialchars($password);
+		$password = trim($password);
 	}
 	
 	if (isset($_POST['login']) and isset($_POST['password'])) {
@@ -75,33 +82,49 @@ if (isset($_POST['signup'])) {
     saveUser("user");
 }
 
+//date counter
+function dateDiffCounter(){
+    $userdata = checkAuth();
+    $login = $userdata['current_user'];
+    $now = date('d-m-Y');
+    $now_timestamp = strtotime($now);
+    // get registration date
+    $result = queryMysql("SELECT reg_date FROM user WHERE login='$login'");
+    $reg_date_db = $result->fetch_array();
+    $string_reg_date_db = $reg_date_db[0];
+    $timestamp_reg_date_db = strtotime($string_reg_date_db);
+    $diff_date = ($now_timestamp - $timestamp_reg_date_db) / 86400;
+    return $diff_date;
+}
+
 // Add admin
 if (isset($_POST['signup_admin'])) {
     saveUser("admin");
 }
 
 function saveUser($role) {
-		$userdata = safeCheckLogPass();
-		$login = $userdata['login'];
-		$password = $userdata['password'];
-		$hash_auth_password = password_hash("$password", PASSWORD_DEFAULT); // хэшируем введённый пароль
-	// проверка на существование пользователя с таким же логином. Ищем user_id в таблице user, где login = переменной login
-		$result = queryMysql("SELECT user_id FROM user WHERE login='$login'");
-		$myrow = $result->fetch_array();
+    $userdata = safeCheckLogPass();
+    $login = $userdata['login'];
+    $password = $userdata['password'];
+    $hash_auth_password = password_hash("$password", PASSWORD_DEFAULT); // хэшируем введённый пароль
+    $reg_date = date("d-m-Y");
+// проверка на существование пользователя с таким же логином. Ищем user_id в таблице user, где login = переменной login
+    $result = queryMysql("SELECT user_id FROM user WHERE login='$login'");
+    $myrow = $result->fetch_array();
 	
-	// если user уже есть, то обрываем регистрацию
-	if (!empty($myrow['user_id'])) {
-		exit ("Извините, введённый вами логин уже зарегистрирован.");
-	}
-	else {
-		// если такого нет, то сохраняем данные и проверяем, есть ли ошибки
-		if (queryMysql("INSERT INTO user (login, password, role) VALUES('$login','$hash_auth_password','$role')")) {
-			echo "Пользователь добавлен. <a href='index.php'>Главная страница</a>";
-		}
-		else {
-			echo "Ошибка! Вы не зарегистрированы.";
-		}
-	}		
+    // если user уже есть, то обрываем регистрацию
+    if (!empty($myrow['user_id'])) {
+            exit ("Извините, введённый вами логин уже зарегистрирован.");
+    }
+    else {
+            // если такого нет, то сохраняем данные и проверяем, есть ли ошибки
+            if (queryMysql("INSERT INTO user (login, password, role, reg_date) VALUES('$login','$hash_auth_password','$role', $reg_date)")) {
+                    echo "Пользователь добавлен. <a href='index.php'>Главная страница</a>";
+            }
+            else {
+                    echo "Ошибка! Вы не зарегистрированы.";
+            }
+    }		
 }
 
 /* Autharization */
@@ -271,7 +294,7 @@ function getUserPic() {
 function userInfo() {
     $userdata = checkAuth();
     $current_user = $userdata['current_user'];
-    if (checkAdmin()) {
+    if (checkAdmin()) { // you are Admin? Get settings
         $settings = "<td><a href='settings.php'>Settings</a></td>";
     } else {}
     
@@ -280,18 +303,19 @@ function userInfo() {
 
     // Выводим заголовок таблицы:
     echo "<table class='table'>";
-    echo "<tr><td>Avatar</td><td>User ID</td><td>Login</td><td>Role</td><td>Last Login</td><td>Change pass</td><td>Settings</td>";
+    echo "<tr><td>Avatar</td><td>User ID</td><td>Login</td><td>Role</td><td>Last Login</td><td>Change pass</td><td>Days on site</td><td>Settings</td>";
     echo "</tr>";
 	
     // Выводим таблицу:  получаем число рядов в выборке , $c меньше кол-ва рядов в выборке ($s->num_rows).
     for ($c=0; $c<$s->num_rows; $c++) {
             echo "<tr>";
-            $f = $s->fetch_array(); 
+            $f = $s->fetch_array();
+            $count_days = dateDiffCounter();
             $userpic = $f['userpic'];
             if ($userpic == ''){
                 $userpic = "<a href='upload_pic.php'>Upload avatar</a>";
             } else {$userpic = getUserPic();}
-            echo "<td>$userpic</td><td>$f[user_id]</td><td>$f[login]</td><td>$f[role]</td><td>$f[log]</td><td><a href='upd_pass.php'><img title='Смена пароля' src='img/pass.png'></a></td>$settings";
+            echo "<td>$userpic</td><td>$f[user_id]</td><td>$f[login]</td><td>$f[role]</td><td>$f[log]</td><td><a href='upd_pass.php'><img title='Смена пароля' src='img/pass.png'></a></td><td>$count_days</td>$settings";
             echo "</tr>";
     }
     echo "</table>";

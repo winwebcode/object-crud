@@ -39,6 +39,15 @@ function checkAuth() {
 return $userdata = ['current_user'=>"$current_user", 'user_id'=>"$user_id", 'role'=>"$role", 'client_ip'=>"$client_ip"];
 }
 
+/*
+function cookieSet(){
+    $userdata = checkAuth();
+    $login = $userdata['current_user'];
+    $user_id = $_SESSION['user_id'];
+    setcookie('login', 'admin', 0, '/');
+}
+ * */
+
 /* Get login / pass and check it */
 function safeCheckLogPass() {
 	// get data login / pass

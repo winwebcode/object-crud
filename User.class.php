@@ -50,39 +50,39 @@ function cookieSet(){
 
 /* Get login / pass and check it */
 function safeCheckLogPass() {
-	// get data login / pass
-	if (isset($_POST['reg_login']) and isset($_POST['reg_password'])) {
-		$login = $_POST['reg_login'];
-		$password = $_POST['reg_password'];
-                // обработка логина пароля для безопасности
-                $login = stripslashes($login);
-		$login = htmlspecialchars($login);
-		$login = trim($login);
-		$password = stripslashes($password);
-		$password = htmlspecialchars($password);
-		$password = trim($password);
-	}
-	
-	if (isset($_POST['login']) and isset($_POST['password'])) {
-		$login = $_POST['login'];
-		$password = $_POST['password'];
-		// обработка логина пароля для безопасности
-		$login = stripslashes($login);
-		$login = htmlspecialchars($login);
-		$login = trim($login);
-		$password = stripslashes($password);
-		$password = htmlspecialchars($password);
-		$password = trim($password);
-	}
-	
-	// check data
-	if ($login == '' or $password == '' or empty($login) or empty($password) or strlen($login)<4 or strlen($password)<6 or $login == $password) {
-		unset($login);
-		unset($password);
-		exit("Возможно, вы ввели не всю информацию, логин = пароль или являются слишком короткие, вернитесь назад и заполните поля корректно!");
-	} else {}
-	
-	return $userdata = ['login'=>"$login", 'password'=>"$password"];
+    // get data login / pass
+    if (isset($_POST['reg_login']) and isset($_POST['reg_password'])) {
+        $login = $_POST['reg_login'];
+        $password = $_POST['reg_password'];
+        // обработка логина пароля для безопасности
+        $login = stripslashes($login);
+        $login = htmlspecialchars($login);
+        $login = trim($login);
+        $password = stripslashes($password);
+        $password = htmlspecialchars($password);
+        $password = trim($password);
+    }
+
+    if (isset($_POST['login']) and isset($_POST['password'])) {
+            $login = $_POST['login'];
+            $password = $_POST['password'];
+            // обработка логина пароля для безопасности
+            $login = stripslashes($login);
+            $login = htmlspecialchars($login);
+            $login = trim($login);
+            $password = stripslashes($password);
+            $password = htmlspecialchars($password);
+            $password = trim($password);
+    }
+
+    // check data
+    if ($login == '' or $password == '' or empty($login) or empty($password) or strlen($login)<4 or strlen($password)<6 or $login == $password) {
+        unset($login);
+        unset($password);
+        exit("Возможно, вы ввели не всю информацию, логин = пароль или являются слишком короткие, вернитесь назад и заполните поля корректно!");
+    } else {}
+
+    return $userdata = ['login'=>"$login", 'password'=>"$password"];
 }
 
 /* Registration and add user, form on reg.php */
@@ -126,13 +126,13 @@ function saveUser($role) {
             exit ("Извините, введённый вами логин уже зарегистрирован.");
     }
     else {
-            // если такого нет, то сохраняем данные и проверяем, есть ли ошибки
-            if (queryMysql("INSERT INTO user (login, password, role, reg_date) VALUES('$login','$hash_auth_password','$role', $reg_date)")) {
-                    echo "Пользователь добавлен. <a href='index.php'>Главная страница</a>";
-            }
-            else {
-                    echo "Ошибка! Вы не зарегистрированы.";
-            }
+        // если такого нет, то сохраняем данные и проверяем, есть ли ошибки
+        if (queryMysql("INSERT INTO user (login, password, role, reg_date) VALUES('$login','$hash_auth_password','$role', $reg_date)")) {
+                echo "Пользователь добавлен. <a href='index.php'>Главная страница</a>";
+        }
+        else {
+                echo "Ошибка! Вы не зарегистрированы.";
+        }
     }		
 }
 
@@ -142,32 +142,31 @@ if (isset($_POST['autharization'])) {
 }
 
 function autharization() {
-	//session_start();
-	// check forms and passwords
-	$userdata = safeCheckLogPass();
-	$login = $userdata['login'];
-	$password = $userdata['password'];
-	//извлекаем из базы все данные о пользователе
-	$resultat = queryMysql("SELECT * FROM user WHERE login='$login'"); 
-	$myrow = $resultat->fetch_array();
+    //session_start();
+    // check forms and passwords
+    $userdata = safeCheckLogPass();
+    $login = $userdata['login'];
+    $password = $userdata['password'];
+    //извлекаем из базы все данные о пользователе
+    $resultat = queryMysql("SELECT * FROM user WHERE login='$login'"); 
+    $myrow = $resultat->fetch_array();
 
 	//если пользователя с введенным логином не существует
     if (empty($myrow['login'])) {
-		exit ("Извините, введённый вами Логин неверный."); // не пишем сообщение что этот логин занят, защита от перебора
+        exit ("Извините, введённый вами Логин неверный."); // не пишем сообщение что этот логин занят, защита от перебора
     }
 	//если существует, то сверяем пароли
     else { 
-		$db_pass_hash = $myrow['password'];  // присваиваем хэш пароля из БД нашей переменной
-		if (password_verify("$password", "$db_pass_hash") and $myrow['ban'] == '') {	//если пароль равен хэшу пароля, то запускаем сессию
-			
-			$_SESSION['login'] = $myrow['login']; 
-			$_SESSION['user_id'] = $myrow['user_id'];		
-			$_SESSION['role'] = $myrow['role'];
-			header('Location: index.php');
-		}
-		else {
-			echo "Извините, введённый вами логин или пароль неверный_2 или вы забанены.";
-		}
+        $db_pass_hash = $myrow['password'];  // присваиваем хэш пароля из БД нашей переменной
+        if (password_verify("$password", "$db_pass_hash") and $myrow['ban'] == '') {	//если пароль равен хэшу пароля, то запускаем сессию
+            $_SESSION['login'] = $myrow['login']; 
+            $_SESSION['user_id'] = $myrow['user_id'];		
+            $_SESSION['role'] = $myrow['role'];
+            header('Location: index.php');
+        }
+        else {
+            echo "Извините, введённый вами логин или пароль неверный_2 или вы забанены.";
+        }
     }
 }	
 
@@ -178,32 +177,31 @@ if (isset($_POST['update_pass'])) {
 }
 
 function changePass() {
-	$userdata = checkAuth();
-	$current_user = $userdata['current_user'];
+    $userdata = checkAuth();
+    $current_user = $userdata['current_user'];
 
-	if (!isset($_POST['new_password']) and !isset($_POST['old_password']) or ($_POST['new_password']) == ($_POST['old_password']) or strlen($_POST['new_password'])<6) {
-            echo "Пароли не введены, равны между собой или менее 6 символов";
-	}
-	else {			
-            $your_old_password = $_POST['old_password']; // действующий, по мнению юзера, пароль
-            $real_old_password_hash = queryMysql("SELECT password FROM user WHERE login='$current_user'"); // реально действ. хэш пароля который в базе
-            $result_real_old_password_hash = $real_old_password_hash->fetch_array();
-            $result_real_old_password_hash = $result_real_old_password_hash['password'];
+    if (!isset($_POST['new_password']) and !isset($_POST['old_password']) or ($_POST['new_password']) == ($_POST['old_password']) or strlen($_POST['new_password'])<6) {
+        echo "Пароли не введены, равны между собой или менее 6 символов";
+    }
+    else {		
+        $your_old_password = $_POST['old_password']; // действующий, по мнению юзера, пароль
+        $real_old_password_hash = queryMysql("SELECT password FROM user WHERE login='$current_user'"); // реально действ. хэш пароля который в базе
+        $result_real_old_password_hash = $real_old_password_hash->fetch_array();
+        $result_real_old_password_hash = $result_real_old_password_hash['password'];
 
-        //если старый пароль совпал с хэшем
-            if (password_verify("$your_old_password", "$result_real_old_password_hash")) {
-                    echo "действующий пароль и хэш совпадают!";
-                    $new_password = $_POST['new_password'];
-                    $new_password = password_hash("$new_password", PASSWORD_DEFAULT); // хешируем пароль
-                    // update pass	
-                    queryMysql("UPDATE user SET password = '$new_password' WHERE login='$current_user'");
-                    header('Location: user.php');
-
-            }
-            else {
-                echo "Ошибка вы ввели не верный действующий пароль";
-            }
-	}
+    //если старый пароль совпал с хэшем
+        if (password_verify("$your_old_password", "$result_real_old_password_hash")) {
+            echo "действующий пароль и хэш совпадают!";
+            $new_password = $_POST['new_password'];
+            $new_password = password_hash("$new_password", PASSWORD_DEFAULT); // хешируем пароль
+            // update pass	
+            queryMysql("UPDATE user SET password = '$new_password' WHERE login='$current_user'");
+            header('Location: user.php');
+        }
+        else {
+            echo "Ошибка вы ввели не верный действующий пароль";
+        }
+    }
 }
 
 /* Get list of users */
